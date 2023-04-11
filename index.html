@@ -80,12 +80,12 @@
 
 
     class TeslaCamFile {
-        separator = "/" //default separator(necessary? not sure)
+        separator = "/" //default separator(necessary? not sure)默认的分隔符(有必要吗？不确定)
         clipType = "SentryClip" //Recorded/SentryClip...
-        triggerDate = "" // folder name doubles as the date the video clip was triggered
-        clipDate = "" // transformed clip name
-        clipName = "" // the clip name
-        file = "" // webkit file incase we need other data
+        triggerDate = "" // folder name doubles as the date the video clip was triggered 文件夹名称作为触发视频剪辑的日期而加倍。
+        clipDate = "" // transformed clip name 转化的片段名称
+        clipName = "" // the clip name 片段名称
+        file = "" // webkit file incase we need other data webkit文件，以备我们需要其他数据
 
         constructor(file) {
             this.clipName = file.name
@@ -103,7 +103,7 @@
             this.triggerDate = directoryParts[2]
         }
 
-        //format to ISO(sorta) - no TZ so defaults to local
+        //格式为ISO（某种程度上）--没有TZ，所以默认为本地格式。
         parseToDate(filename) {
             let nameArry = filename.split("_");
             let dateArry = nameArry[0].split("-");
@@ -121,11 +121,11 @@
         }
     }
 
-    //The following code uses webkitdirectory to get all the videos from a directory
+    //以下代码使用webkitdirectory从一个目录中获取所有视频
     document.querySelector("input[type=file][id=fileBrowser]").addEventListener("change", function (e) {
         var files = e.target.files
         tcFiles = []
-        //get "back" files to sort from webkitRelativePath
+        //从webkitRelativePath中获取 "返回 "文件以进行排序
         for (let i = 0; i < files.length; i++) {
             var file = files[i]
             if (file.webkitRelativePath.endsWith("-back.mp4")) {
@@ -134,14 +134,14 @@
             }
         }
 
-        //Sort the files in ascending date
+        //以升序日期对文件进行排序
         tcFiles.sort(function (a, b) {
             var firstDate = a.clipDate
             var secondDate = b.clipDate
             return firstDate - secondDate
         })
 
-        // Create dropdown for clips
+        // 为剪辑创建下拉菜单
         tmpDir = [] //track dir's added
         // if(document.querySelector("select.date-select") != undefined) {
         //     document.querySelector("select.date-select").remove()
@@ -158,7 +158,7 @@
                 tmpDir.push(dir)
                 var option = document.createElement("option")
                 option.innerText = dir
-                option.value = index // assume that the index is going to be the first clip for each new date.
+                option.value = index // 假设该索引将是每个新日期的第一个片段。
                 dateSelector.appendChild(option)
             }
         })
@@ -166,11 +166,14 @@
         carousel = tcFiles
         loadVideos(0)
     })
+
+    //选择视频标题
     dateSelector.addEventListener("change", function (e) {
         carouselIndex = parseInt(e.target.options[e.target.selectedIndex].value)
         loadVideos(carouselIndex)
     })
 
+    //为四个视频窗口加载url
     function loadVideos(index) {
         title.innerHTML = carousel[index].build()
         backVideo.src = carousel[index].build() + "-back.mp4"
@@ -179,6 +182,7 @@
         rightVideo.src = carousel[index].build() + "-right_repeater.mp4"
     }
 
+    //播放视频
     function playVideos() {
         frontVideo.play()
         backVideo.play()
@@ -190,19 +194,19 @@
         leftVideo.playbackRate = playbackRate;
         rightVideo.playbackRate = playbackRate;
     }
-
+    //播放速度
     function playRate(rate) {
         playbackRate = rate
         playVideos()
     }
-
+    //暂停
     function pauseVideos() {
         frontVideo.pause()
         backVideo.pause()
         leftVideo.pause()
         rightVideo.pause()
     }
-
+    //播放/暂停
     function playPause() {
         if (playPauseFlag != true) {
             playVideos()
@@ -214,14 +218,14 @@
     }
 
     let videos = document.querySelectorAll("video");
-
+    //跳转秒数
     function skipTo(seconds) {
         videos.forEach(video => {
             video.currentTime += seconds
         })
     }
 
-    //Add listeners for play, pause and click buttons for each video.
+    //为每个视频添加播放、暂停和点击按钮的监听器。
     videos.forEach(video => {
         video.addEventListener("play", function (e) {
             console.log(e)
@@ -239,7 +243,7 @@
                 pauseVideos()
             }
         })
-
+        //拖动单个视频进度条会导致播放时间不一致，点击任一视频即可同步时间至点击窗口
         video.addEventListener("click", function (e) {
             console.log(e)
             var currentTime = e.target.currentTime
@@ -256,7 +260,7 @@
                 backVideo.currentTime = currentTime
             }
         })
-
+        //canplaythrough 事件在终端可以播放媒体文件时(估计已经加载了足够的数据来播放媒体直到其结束,而不必停止以进一步缓冲内容)被触发
         video.addEventListener("canplaythrough", function (e) {
             console.log("Can Play Through")
             if (document.querySelector("input[name=autoplay]").checked) {
@@ -267,16 +271,18 @@
 
     var carouselIndex = 0
 
+    //下一段视频
     next.addEventListener("click", function () {
         carouselIndex += 1
         loadVideos(carouselIndex)
     })
+    //上一段视频
 
     previous.addEventListener("click", function () {
         carouselIndex -= 1
         loadVideos(carouselIndex)
     })
-
+    //播放完根据autoplay的值决定是否自动播放下一段
     backVideo.addEventListener("ended", function () {
         console.log("Ended")
         if (document.querySelector("input[name=autoplay]").checked) {
