@@ -1,122 +1,69 @@
 <html>
-    <head>
-        <style>
-            div {
-                border:1px solid;
-                align-content: center;
-            }
-            div.title {
-                font-size: 25px;
-                text-align: center;
-            }
-            div.title>span {
-                color: red;
-            }
-            div>div.global-controls{
-                display: inline-block;
-            }
-            .play_speed {
-                display: inline-block;
-                padding: 5px;
-                text-align: center;
-            }
-            .controls {
-                display: inline-block;
-                padding: 5px;
-                text-align: center;
-            }
-            video {
-                width: 600px;
-                height: 450px;
-            }
-            table tr td {
-                border:1px solid;
-                text-align: center;
-            }
-            textarea {
-                width: 100%;
-            }
-            div.readme {
-                padding: 5px;
-            }
-            code {
-                background:lightgrey
-            }
-        </style>
-    </head>
-    <body>
+
+<head>
+    <div>
         <div>
-            <div>
-                <strong>Select TeslaCam Directory</strong>(Must be in same directory as Index.html):<br/> 
-                <input type="file" id="fileBrowser" accept="video/mp4" webkitdirectory multiple/>
-            </div>
-            <div>   
-                Browse Loaded Clips: <select class="date-select"><option>- - - - - -</option></select>
-            </div>
+            <strong>选择TeslaCam文件夹</strong>(本文件(Index.html)需与TeslaCam位于同一级目录):<br />
+            <input type="file" id="fileBrowser" accept="video/mp4" webkitdirectory multiple />
         </div>
-        
-        <div class="global-controls">
-            <div class="play_speed">
-                <span>Play Speed</span><br/>
-                <button onclick="playRate(0.5)">0.5x</button>
-                <button onclick="playRate(1)">1x</button>
-                <button onclick="playRate(2)">2x</button>
-                <button onclick="playRate(3)">3x</button>
-                <button onclick="playRate(8)">8x</button>
-            </div>
-            <div class="controls">
-                <span>General Controls</span><br/>
-                <button class="previous">&lt;&lt;PREV&lt;&lt;</button>
-                <button class="skip" onclick="skipTo(-5)">-5</button>
-                <button class="skip" onclick="skipTo(-3)">-3</button>
-                <button onclick="playPause()">PLAY/PAUSE</button>
-                <button class="skip" onclick="skipTo(3)">3</button>
-                <button class="skip" onclick="skipTo(5)">5</button>
-                <button class="next">&gt;&gt;NEXT&gt;&gt;</button>
-                <input checked type="checkbox" name="autoplay"/>Autoplay
-            </div>
+        <div>
+            选取已加载片段: <select class="date-select">
+                <option>- - - - - -</option>
+            </select>
         </div>
-		<div>
-            <div class="title">
-                <span>No Videos Loaded</span>
-            </div>
-            <table>
-                <tr>
-                    <td><video class="left_repeater"  src="" controls controlsList="play pause"></video></td>
-                    <td><video class="front"          src="" controls controlsList="play pause"></video></td>
-                    <td><video class="right_repeater" src="" controls controlsList="play pause"></video></td>
-                </tr>
-                
-                <tr>
-                    <td colspan="3"><video class="back" src="" controls controlsList="play pause"></video></td>
-                </tr>
-            </table> 
+    </div>
+
+    <div class="global-controls">
+        <div class="play_speed">
+            <span>播放速度</span><br />
+            <button onclick="playRate(0.5)">0.5x</button>
+            <button onclick="playRate(1)">1x</button>
+            <button onclick="playRate(2)">2x</button>
+            <button onclick="playRate(3)">3x</button>
+            <button onclick="playRate(8)">8x</button>
         </div>
-        <div class="readme">
-            <h2>README</h2>
-            <hr/>
-            <strong>Directory Placement</strong><br/>
-            This <code>index.html</code> file <strong>must</strong> be at the same level as the <code>TeslaCam</code> folder which can be placed directly on the root of the USB drive.<br/>
-            <strong>Example:</strong><br/>
-            <code>
-            Root Folder<br/>
-            |- index.html<br/>
-            |- TeslaCam(USB Drive Top Level Folder)<br/>
-            &nbsp;&nbsp;&nbsp;|- Saved Clips<br/>
-            &nbsp;&nbsp;&nbsp;|- Sentry Videos<br/>
-            &nbsp;&nbsp;&nbsp;|- ...<br/>
-            </code><br/>
+        <div class="controls">
+            <span>播放控制</span><br />
+            <button class="previous">&lt;&lt;前一条&lt;&lt;</button>
+            <button class="skip" onclick="skipTo(-5)">-5</button>
+            <button class="skip" onclick="skipTo(-3)">-3</button>
+            <button onclick="playPause()">播放/暂停</button>
+            <button class="skip" onclick="skipTo(3)">3</button>
+            <button class="skip" onclick="skipTo(5)">5</button>
+            <button class="next">&gt;&gt;后一条&gt;&gt;</button>
+            <input checked type="checkbox" name="autoplay" />自动播放
         </div>
-	</body>
+    </div>
+    <div>
+        <div class="title">
+            <span>无视频加载</span>
+        </div>
+        <table>
+            <tr>
+                <td><video class="left_repeater" src="" controls controlsList="play pause"></video></td>
+                <td><video class="front" src="" controls controlsList="play pause"></video></td>
+                <td><video class="right_repeater" src="" controls controlsList="play pause"></video></td>
+            </tr>
+
+            <tr>
+                <td colspan="3"><video class="back" src="" controls controlsList="play pause"></video></td>
+            </tr>
+        </table>
+    </div>
+</head>
+
+<body>
+
+</body>
 
 <script>
-	var carouselIndex;
-	var selectItemIndex;
-	var files;
-	
+    var carouselIndex;
+    var selectItemIndex;
+    var files;
+
     var playbackRate = 1
-	var playPauseFlag = true;
-	
+    var playPauseFlag = true;
+
     var carousel = []
     var title = document.querySelector("div.title")
     var backVideo = document.querySelector("video.back")
@@ -140,7 +87,7 @@
         clipName = "" // the clip name
         file = "" // webkit file incase we need other data
 
-        constructor(file){
+        constructor(file) {
             this.clipName = file.name
             this.clipDate = Date.parse(this.parseToDate(file.name))
             this.getDirectories(file)
@@ -149,7 +96,7 @@
             this.file = file
         }
 
-        getDirectories(file){
+        getDirectories(file) {
             this.separator = file.webkitRelativePath.replace(file.name, "").substr(-1)
             var directoryParts = file.webkitRelativePath.split(this.separator)
             this.clipType = directoryParts[1]
@@ -157,38 +104,38 @@
         }
 
         //format to ISO(sorta) - no TZ so defaults to local
-        parseToDate(filename){
+        parseToDate(filename) {
             let nameArry = filename.split("_");
             let dateArry = nameArry[0].split("-");
             let hourArry = nameArry[1].split("-");
-            return dateArry[0]+"-"+dateArry[1]+"-"+dateArry[2]+"T"+hourArry[0]+":"+hourArry[1]+":"+hourArry[2]; 
+            return dateArry[0] + "-" + dateArry[1] + "-" + dateArry[2] + "T" + hourArry[0] + ":" + hourArry[1] + ":" + hourArry[2];
         }
 
-        build(){
+        build() {
             var filePath = "TeslaCam" + this.separator + this.clipType
-            if(this.clipType != "RecentClips"){
+            if (this.clipType != "RecentClips") {
                 filePath += this.separator + this.triggerDate
             }
 
-            return filePath + this.separator + this.clipName.replace(/-back.mp4$/gm,'')
+            return filePath + this.separator + this.clipName.replace(/-back.mp4$/gm, '')
         }
     }
-	
-	//The following code uses webkitdirectory to get all the videos from a directory
-    document.querySelector("input[type=file][id=fileBrowser]").addEventListener("change", function(e){
+
+    //The following code uses webkitdirectory to get all the videos from a directory
+    document.querySelector("input[type=file][id=fileBrowser]").addEventListener("change", function (e) {
         var files = e.target.files
         tcFiles = []
         //get "back" files to sort from webkitRelativePath
-        for (let i=0; i<files.length; i++) {
+        for (let i = 0; i < files.length; i++) {
             var file = files[i]
-            if(file.webkitRelativePath.endsWith("-back.mp4")){
+            if (file.webkitRelativePath.endsWith("-back.mp4")) {
                 var tcFile = new TeslaCamFile(file)
                 tcFiles.push(tcFile)
             }
         }
-        
+
         //Sort the files in ascending date
-        tcFiles.sort(function(a,b){
+        tcFiles.sort(function (a, b) {
             var firstDate = a.clipDate
             var secondDate = b.clipDate
             return firstDate - secondDate
@@ -202,11 +149,11 @@
         dateSelector.innerHTML = null
 
         tcFiles.forEach((tcFile, index) => {
-            dir = tcFile.clipType+tcFile.separator+tcFile.triggerDate
+            dir = tcFile.clipType + tcFile.separator + tcFile.triggerDate
             if (tcFile.clipType == "RecentClips") {
-                dir = tcFile.clipType+tcFile.separator+tcFile.clipName.replace(/-back.mp4$/gm,'')
+                dir = tcFile.clipType + tcFile.separator + tcFile.clipName.replace(/-back.mp4$/gm, '')
             }
-            
+
             if (!tmpDir.includes(dir)) {
                 tmpDir.push(dir)
                 var option = document.createElement("option")
@@ -219,56 +166,56 @@
         carousel = tcFiles
         loadVideos(0)
     })
-    dateSelector.addEventListener("change", function(e){
+    dateSelector.addEventListener("change", function (e) {
         carouselIndex = parseInt(e.target.options[e.target.selectedIndex].value)
         loadVideos(carouselIndex)
     })
 
-    function loadVideos(index){
+    function loadVideos(index) {
         title.innerHTML = carousel[index].build()
-        backVideo.src = carousel[index].build()+"-back.mp4"
-        frontVideo.src = carousel[index].build()+"-front.mp4"
-        leftVideo.src = carousel[index].build()+"-left_repeater.mp4"
-        rightVideo.src = carousel[index].build()+"-right_repeater.mp4"
+        backVideo.src = carousel[index].build() + "-back.mp4"
+        frontVideo.src = carousel[index].build() + "-front.mp4"
+        leftVideo.src = carousel[index].build() + "-left_repeater.mp4"
+        rightVideo.src = carousel[index].build() + "-right_repeater.mp4"
     }
 
-    function playVideos(){
+    function playVideos() {
         frontVideo.play()
         backVideo.play()
         leftVideo.play()
         rightVideo.play()
 
-        frontVideo.playbackRate=playbackRate;
-        backVideo.playbackRate=playbackRate;
-        leftVideo.playbackRate=playbackRate;
-        rightVideo.playbackRate=playbackRate;
+        frontVideo.playbackRate = playbackRate;
+        backVideo.playbackRate = playbackRate;
+        leftVideo.playbackRate = playbackRate;
+        rightVideo.playbackRate = playbackRate;
     }
-	
-    function playRate(rate){
+
+    function playRate(rate) {
         playbackRate = rate
         playVideos()
     }
 
-    function pauseVideos(){
+    function pauseVideos() {
         frontVideo.pause()
         backVideo.pause()
         leftVideo.pause()
         rightVideo.pause()
     }
 
-	function playPause() {
-        if (playPauseFlag!=true){
+    function playPause() {
+        if (playPauseFlag != true) {
             playVideos()
             playPauseFlag = true;
         } else {
             pauseVideos()
             playPauseFlag = false;
         }
- 	}
-	
+    }
+
     let videos = document.querySelectorAll("video");
 
-    function skipTo(seconds){
+    function skipTo(seconds) {
         videos.forEach(video => {
             video.currentTime += seconds
         })
@@ -276,16 +223,16 @@
 
     //Add listeners for play, pause and click buttons for each video.
     videos.forEach(video => {
-        video.addEventListener("play", function(e){
+        video.addEventListener("play", function (e) {
             console.log(e)
             playVideos()
         })
 
-        video.addEventListener("pause", function(e){
+        video.addEventListener("pause", function (e) {
             console.log(e)
-            if(e.target.ended){
-                if(document.querySelector("input[name=autoplay]").checked){
-                    carouselIndex+=1
+            if (e.target.ended) {
+                if (document.querySelector("input[name=autoplay]").checked) {
+                    carouselIndex += 1
                     loadVideos(carouselIndex)
                 }
             } else {
@@ -293,50 +240,106 @@
             }
         })
 
-        video.addEventListener("click", function(e){
+        video.addEventListener("click", function (e) {
             console.log(e)
             var currentTime = e.target.currentTime
-            if(e.target != frontVideo) {
+            if (e.target != frontVideo) {
                 frontVideo.currentTime = currentTime
             }
-            if(e.target != leftVideo) {
+            if (e.target != leftVideo) {
                 leftVideo.currentTime = currentTime
             }
-            if(e.target != rightVideo) {
+            if (e.target != rightVideo) {
                 rightVideo.currentTime = currentTime
             }
-            if(e.target != backVideo) {
+            if (e.target != backVideo) {
                 backVideo.currentTime = currentTime
             }
         })
 
-        video.addEventListener("canplaythrough", function(e){
+        video.addEventListener("canplaythrough", function (e) {
             console.log("Can Play Through")
-            if(document.querySelector("input[name=autoplay]").checked){
+            if (document.querySelector("input[name=autoplay]").checked) {
                 playVideos()
             }
         })
     })
-    
+
     var carouselIndex = 0
 
-    next.addEventListener("click", function(){
-        carouselIndex+=1
+    next.addEventListener("click", function () {
+        carouselIndex += 1
         loadVideos(carouselIndex)
     })
 
-    previous.addEventListener("click", function(){
-        carouselIndex-=1
+    previous.addEventListener("click", function () {
+        carouselIndex -= 1
         loadVideos(carouselIndex)
     })
 
-    backVideo.addEventListener("ended", function(){
+    backVideo.addEventListener("ended", function () {
         console.log("Ended")
-        if(document.querySelector("input[name=autoplay]").checked){
-            carouselIndex+=1
+        if (document.querySelector("input[name=autoplay]").checked) {
+            carouselIndex += 1
             loadVideos(carouselIndex)
         }
     })
-	
+
 </script>
+
+
+<style>
+    div {
+        border: 1px solid;
+        align-content: center;
+    }
+
+    div.title {
+        font-size: 25px;
+        text-align: center;
+    }
+
+    div.title>span {
+        color: red;
+    }
+
+    div>div.global-controls {
+        display: inline-block;
+    }
+
+    .play_speed {
+        display: inline-block;
+        padding: 5px;
+        text-align: center;
+    }
+
+    .controls {
+        display: inline-block;
+        padding: 5px;
+        text-align: center;
+    }
+
+    video {
+        width: 32vw;
+        height: 24vw;
+    }
+
+    table tr td {
+        border: 1px solid;
+        text-align: center;
+    }
+
+    textarea {
+        width: 100%;
+    }
+
+    div.readme {
+        padding: 5px;
+    }
+
+    code {
+        background: lightgrey
+    }
+</style>
+
 </html>
